@@ -62,8 +62,7 @@ public class Client3 {
 		String xform = "RSA/ECB/NoPadding";
 		encryptedMsg = Client3.decrypt(encryptedMsg, router2_publickey, xform);
 		String encodedByClient1 = Base64.getEncoder().encodeToString(encryptedMsg);
-		System.out.println("first decrypted msg: " + encodedByClient1);
-		
+		//System.out.println("first decrypted msg: " + encodedByClient1);
 		encryptedMsg = Client3.decrypt(encryptedMsg, client1_publickey, xform);
 		//String encodedHashMsg = Hex.encodeHex(encryptedMsg);
 		StringBuffer sb = new StringBuffer();
@@ -74,27 +73,18 @@ public class Client3 {
 		//System.out.println("original:" + original);
 
 		//byte[] decodedMsg = Base64.getDecoder().decode(sb.toString());
-		System.out.println("***digested(hex):" + sb.toString());
+		//System.out.println("***digested(hex):" + sb.toString());
 		//System.out.println("second decrypted msg: " + new String(encryptedMsg));
 		//System.out.println("encoded hashed msg: " + encodedHash.length());
 		String hash = sb.substring(sb.length() - 32);
-		System.out.println("hash string length: " + hash.getBytes("UTF-8").length);
+		//System.out.println("hash string length: " + hash.getBytes("UTF-8").length);
 		
 		return hash.getBytes("UTF-8");
 	}
 	
 	
 	public static void main(String[] args) throws Exception {
-		//String msg = "hello world";
-		//MessageDigest hashedMsg = MessageDigest.getInstance("MD5"); 
-		//hashedMsg.update(msg.getBytes(), 0, msg.length());
-		//String hashedStringMsg = new BigInteger(1, hashedMsg.digest()).toString(64); 
-		//byte[] hashedMsg = MD5Hash.MD5Hash(msg);
 		
-		//String encodedhash = Base64.getEncoder().encodeToString(hashedMsg);
-		//System.out.println("hashed msg: " + encodedhash);
-		//System.out.println("hashed msg size: " + hashedMsg.length);
-			
  		KeyPair client3_kp = Client3.generateKeyPair();
  		int client1PubkPort = 4444;
  		int router2PubkPort = 4445;
@@ -106,9 +96,10 @@ public class Client3 {
  		// message from router2
 		Message msgFromRouter2 = Client3.readMsgFromRouter2(msgFromRouter2Port);
 		byte[] decodedMsg = Base64.getDecoder().decode(msgFromRouter2.getEncodedMsg());
-
-		String router2Msg = Base64.getEncoder().encodeToString(decodedMsg);
-		System.out.println("reading msg: " + router2Msg);
+		System.out.println(msgFromRouter2.toString());
+		//String router2Msg = Base64.getEncoder().encodeToString(decodedMsg);
+		//System.out.println("reading msg: " + router2Msg);
+		
 		// decrypted message
 		byte[] decryptedMsg = Client3.decryptMsg(decodedMsg, client1_publickey, router2_publickey);
 		String original = msgFromRouter2.getOrginalMsg();
@@ -120,11 +111,12 @@ public class Client3 {
 		for (byte b : digest) {
 			sb.append(String.format("%02x", b & 0xff));
 		}
-
+		
 		System.out.println("original:" + original);
-		System.out.println("digested(hex):" + sb.toString());
+		//System.out.println("digested(hex):" + sb.toString());
 
-		System.out.println("digest length: " + sb.length());
+		System.out.println("decrypted MD5 hash code: " + new String(decryptedMsg));
+		System.out.println("Result of camparing decrypted message with original message: ");
 		System.out.println(Arrays.equals(sb.toString().getBytes("UTF-8"), decryptedMsg));
 	}
 

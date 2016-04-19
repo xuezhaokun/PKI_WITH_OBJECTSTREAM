@@ -72,8 +72,7 @@ public class Router2 {
 		msg.setEncodedMsg(encodedMsg);
 		String[] updatedRoute = {"Client3"};
 		msg.setRoute(updatedRoute);
-		msg.toString();
-		System.out.println("sending msg: " + encodedMsg);
+		System.out.println("sending msg: " + msg.toString());
 		
         ObjectOutputStream oos1 = new ObjectOutputStream(router2Socket.getOutputStream());
         oos1.writeObject(msg);

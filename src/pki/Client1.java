@@ -49,8 +49,6 @@ public class Client1 {
 		MessageDigest md = MessageDigest.getInstance("MD5");
 		md.update(original.getBytes());
 		byte[] digest = md.digest();
-
-		System.out.println("original:" + original);
 		
 		PrivateKey prvk = kp.getPrivate();
 		
@@ -58,11 +56,11 @@ public class Client1 {
 		//DataOutputStream outToRouter2 = new DataOutputStream(client1Socket.getOutputStream());
 		byte[] encryptedMsg = encrypt(digest, prvk, xform);
 		String encodedMsg = Base64.getEncoder().encodeToString(encryptedMsg);
-		System.out.println("sending msg: " + encodedMsg);
+		
 		String[] updatedRoute = {"Router2", "Client3"};
 		
         Message msgObj = new Message(original, encodedMsg, updatedRoute);
-        msgObj.toString();
+        System.out.println("sending msg: " + msgObj.toString());
         ObjectOutputStream oos1 = new ObjectOutputStream(client1Socket.getOutputStream());
         oos1.writeObject(msgObj);
         
